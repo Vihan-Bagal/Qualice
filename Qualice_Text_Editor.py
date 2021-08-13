@@ -28,6 +28,9 @@ TextMode = True
 checkCounter = 0
 prevWords = ""
 
+global open_status_name
+open_status_name = False
+
 
 main_frame = Frame(root)
 main_frame.pack(pady=5, fill=BOTH, expand=1)
@@ -50,6 +53,16 @@ def insert(event):
     global isInsert
     isInsert = True
 
+def save_file(event):
+    global open_status_name
+    if open_status_name:
+        text_file = open(open_status_name, 'w')
+        text_file.write(text_box.get(1.0, END))
+
+        text_file.close()
+    else:
+        SaveAs_File()
+
 def escape_insert(event):
     global isInsert
     isInsert = False
@@ -61,6 +74,10 @@ def open_file(event):
     text_box.config(state=NORMAL)
     text_box.delete("1.0", END)
     text_file = filedialog.askopenfilename(initialdir="/Users/vihanbagal", title="Open File", filetypes=(("Text Files", "*.txt"), ("All Files", "*.*"), ("Python Files", "*.py"), ("HTML Files", "*.html")))
+    if(text_file):
+        global open_status_name
+        open_status_name = text_file
+
     name = text_file
     name = name.replace("/Users/vihanbagal", "")
 
@@ -147,6 +164,7 @@ def main():
         root.bind("<t>", enter_Text_mode)
         root.bind("<T>", exit_Text_mode)
         root.bind("<S>", SaveAs_File)
+        root.bind("<s>", save_file)
 
     if(isInsert == True):
         text_box.config(state=NORMAL)
@@ -156,6 +174,7 @@ def main():
         root.unbind("<t>")
         root.unbind("<T>")
         root.unbind("<S>")
+        root.unbind("<s>")
     if(TextMode):
         if((((time.time()-start_time) - (checkCounter * 0.5)) > 0.5)):
             Spell_Check()
