@@ -117,9 +117,11 @@ def Spell_Check():
     wordstring = ' '.join(words)
     if (words == "" or words == prevWords):
         return
-    suggestions = sym_spell.lookup_compound(wordstring, max_edit_distance=2,
+    suggestions_string = sym_spell.lookup_compound(wordstring, max_edit_distance=2,
                                         transfer_casing=True)
-    for suggestion in suggestions:
+
+
+    for suggestion in suggestions_string:
         wordlist = (suggestion.term).split()
         for w in words:
             if(counter < len(wordlist)):
